@@ -9,7 +9,7 @@ const CompraMain = ( ) => {
   const [botonVisible, setBotonVisible] = useState(false);
   const [paypalSelected, setPaypalSelected] = useState(false); 
   const [walletSelected, setWalletSelected] = useState(false); 
-  const [compras, setCompras] = useState([]);
+  //const [compras, setCompras] = useState([]);
 
   const formatNumeroTarjeta = (input) => {
     var numero = input.value.replace(/\D/g, '');
@@ -74,6 +74,7 @@ const generarSaldoAleatorio = () => {
     if (paypalSelected) {
         const correo = document.getElementById('correo').value;
         const contraseña = document.getElementById('password').value;
+        //const saldo = generarSaldoAleatorio();
 
         const requestOptions = {
             method: 'POST',
@@ -84,29 +85,29 @@ const generarSaldoAleatorio = () => {
         try {
             const response = await fetch("http://localhost:5194/api/PayPal", requestOptions);
             const data = await response.json();
-
+            console.log(data)
             if (response.ok) {
-                if (data.SaldoSuficiente) {
-                    console.log('Redireccionando a confirmación...');
-                    navigate('/confirmacion');
-                    alert("Aceptado. Su saldo es suficiente.");
-                } else {
-                    alert(data.Mensaje); 
-                }
-            } else {
-                if (response.status === 404) {
-                    alert('Usuario o contraseña incorrectos.');
-                } else {
-                    alert('Error desconocido. Por favor intente de nuevo.');
-                }
-            }
-        } catch (error) {
-            console.error('Error en la solicitud:', error);
-            alert('Error al procesar la solicitud.');
-        }
-    } else if (walletSelected) {
-        guardar();
-    }
+              if (data.saldoSuficiente) { // Asegúrate de que el nombre de la propiedad es correcto
+                  console.log('Redireccionando a confirmación...');
+                  navigate('/confirmacion');
+                  alert("Aceptado. Su saldo es suficiente.");
+              } else {
+                  alert(data.Mensaje || "Saldo insuficiente"); 
+              }
+          } else {
+              if (response.status === 404) {
+                  alert('Usuario o contraseña incorrectos.');
+              } else {
+                  alert('Error desconocido. Por favor intente de nuevo.');
+              }
+          }
+      } catch (error) {
+          console.error('Error en la solicitud:', error);
+          alert('Error al procesar la solicitud.');
+      }
+  } else if (walletSelected) {
+      guardar();
+  }
 };
 
 
@@ -118,15 +119,16 @@ const generarSaldoAleatorio = () => {
     const mes = document.getElementById('valido-hasta-dia').value;
     const anio = document.getElementById('valido-hasta-ano').value;
     const cvv = document.getElementById('cvv').value;
-  
+    
+
     const IDTarjeta = generarIDTarjeta();
     const saldo = generarSaldoAleatorio();
 
 
     const walletData = {
       TarjetaID: IDTarjeta.toString(),
-      NumeroTarjetaCredito: numeroTarjeta,
       UserID: nombre,
+      NumeroTarjetaCredito: numeroTarjeta,
       Mes: mes,
       Anio: anio,
       CVV: cvv,
@@ -145,21 +147,19 @@ const generarSaldoAleatorio = () => {
     };
   
     try {
-      const resp = await fetch(URL, requestOptions);
-      if (!resp.ok) {
-        
-        const errorData = await resp.json();
-        console.error("Error al guardar:", errorData);
-
-        return;
+      const response = await fetch(URL, requestOptions);
+      const data = await response.json();
+      if (response.ok) {
+          navigate('/confirmacion');
+          alert("Transacción exitosa");
+      } else {
+          alert(data.Message || "Error al procesar la solicitud.");
       }
-      const compraItem = await resp.json();
-      setCompras([...compras, compraItem]);
-      navigate('/confirmacion');
-    } catch (error) {
+  } catch (error) {
       console.error("Error en la solicitud:", error);
-    }
-  };
+      alert('Error al procesar la solicitud.');
+  }
+};
   
 
   return (

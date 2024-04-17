@@ -1,66 +1,49 @@
-import './confirmacion.css'
+import './confirmacion.css';
 import { useEffect, useState } from 'react';
-
+import { Link } from 'react-router-dom';
 
 const Confirmacion = () => {
-    
     const [numeroConfirmacion, setNumeroConfirmacion] = useState('');
+    const [loading, setLoading] = useState(true); // Estado para controlar el loader
 
     useEffect(() => {
-        const mensajesDebajo = document.querySelector('.mensajes-debajo');
-
-        while (mensajesDebajo.firstChild) {
-            mensajesDebajo.removeChild(mensajesDebajo.firstChild);
-        }
-
         confirmarCompra();
+        setTimeout(() => {
+            setLoading(false); // Oculta el loader después de 3 segundos
+        }, 3000);
     }, []);
 
     const confirmarCompra = async () => {
-        const URL = "http://localhost:5194/api/ConfirmacionCompra"; 
-        
+        const numeroConfirmacion = Math.floor(10000 + Math.random() * 90000).toString();
+        setNumeroConfirmacion(numeroConfirmacion);
+
+        const URL = "http://localhost:5194/api/ConfirmacionCompra";
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({}) 
+            body: JSON.stringify({ NumeroConfirmacion: numeroConfirmacion })
         };
-    
+
         try {
             const response = await fetch(URL, requestOptions);
-            if (!response.ok) throw new Error('Respuesta del servidor no fue OK.');
-            const data = await response.json();
-            setNumeroConfirmacion(data.NumeroConfirmacion); 
-            mostrarMensaje(`Número de confirmación: ${data.NumeroConfirmacion}`, 'numero-confirmacion');
+            if (!response.ok) throw new Error("No se pudo confirmar la compra");
         } catch (error) {
             console.error("Error al confirmar la compra:", error);
-            mostrarMensaje("Error al procesar la compra.", 'error');
         }
     };
 
-    const mostrarMensaje = (texto, clase) => {
-        const mensajesDebajo = document.querySelector('.mensajes-debajo');
-        const nuevoMensaje = document.createElement('div');
-        nuevoMensaje.textContent = texto;
-        nuevoMensaje.classList.add(clase);
-        mensajesDebajo.appendChild(nuevoMensaje);
-    };
-  
-  
     return (
         <div>
-            {/* Encabezado de la página */}
             <header>
                 <div className="container">
                     <div className="logo">
-                        <a href="Compra.jsx">
-                            <img src="#" alt="Logo Puente Global" />
-                        </a>
+                        <Link to="/"><img src="#" alt="Logo Puente Global" /></Link>
                     </div>
                     <div className="navegacion">
                         <ul>
-                            <li><a href="#">Reservas</a></li>
-                            <li><a href="#">Boletos</a></li>
-                            <li><a href="#">Vuelos</a></li>
+                            <li><Link to="/reservas">Reservas</Link></li>
+                            <li><Link to="/boletos">Boletos</Link></li>
+                            <li><Link to="/vuelos">Vuelos</Link></li>
                         </ul>
                     </div>
                     <div className="usuario">
@@ -68,13 +51,17 @@ const Confirmacion = () => {
                     </div>
                 </div>
             </header>
-
-            <span className="loader"></span>
-            <div className="mensaje"></div>
-            <div className="mensajes-debajo"> {numeroConfirmacion && <div className="numero-confirmacion">Número de Confirmación: {numeroConfirmacion}</div>}</div>
+            {loading && <span className="loader"></span>}
+            <div className="mensajes-debajo">
+            {!loading && numeroConfirmacion && (
+                    <>
+                        <div className="compra-confirmada">Compra Realizada</div>
+                        <div className="numero-confirmacion">Número de Confirmación: {numeroConfirmacion}</div>
+                    </>
+                )}
+            </div>
         </div>
-        
-    )
-}
+    );
+};
 
-export default Confirmacion
+export default Confirmacion;
