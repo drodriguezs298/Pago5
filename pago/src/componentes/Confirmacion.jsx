@@ -47,7 +47,7 @@ const Confirmacion = () => {
   
   
     return (
-        <><div>
+        <div>
             {/* Encabezado de la página */}
             <header>
                 <div className="container">
@@ -74,9 +74,6 @@ const Confirmacion = () => {
             <div className="mensajes-debajo"> {numeroConfirmacion && <div className="numero-confirmacion">Número de Confirmación: {numeroConfirmacion}</div>}</div>
         </div>
         
-        <footer>
-
-            </footer></>
     )
 }
 
