@@ -1,15 +1,15 @@
 import './stylecompra.css'
 import { useState } from 'react';
-//import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-const CompraMain = () => {
-
+const CompraMain = ( ) => {
+  const navigate = useNavigate();
   const [paypalVisible, setPaypalVisible] = useState(false);
   const [walletVisible, setWalletVisible] = useState(false);
   const [botonVisible, setBotonVisible] = useState(false);
   const [paypalSelected, setPaypalSelected] = useState(false); 
   const [walletSelected, setWalletSelected] = useState(false); 
-  const [compras, setCompras] = useState([]);
+  //const [compras, setCompras] = useState([]);
 
   const formatNumeroTarjeta = (input) => {
     var numero = input.value.replace(/\D/g, '');
@@ -31,7 +31,17 @@ const CompraMain = () => {
       mostrarButton.textContent = 'Ver';
     }
   }
-
+  const toggleMostrarContraseña= () => {
+    var passwordInput = document.getElementById('password');
+    var mostrarButton = document.getElementById('mostrar-contra');
+    if (passwordInput.type === 'password') {
+      passwordInput.type = 'text';
+      mostrarButton.textContent = 'Ocultar';
+    } else {
+      passwordInput.type = 'password';
+      mostrarButton.textContent = 'Ver';
+    }
+  }
   // Genera un ID de tarjeta aleatorio entre 1 y 1000
 const generarIDTarjeta = () => {
   return Math.floor(Math.random() * 1000) + 1;
@@ -59,13 +69,47 @@ const generarSaldoAleatorio = () => {
     setPaypalSelected(false); 
   };
 
-  //const navigate = useNavigate();
-
-  const handleAceptarClick = (event) => {
+  const handleAceptarClick = async (event) => {
     event.preventDefault(); 
-    guardar();
-   // navigate('/confirmacion'); 
-  };
+    if (paypalSelected) {
+        const correo = document.getElementById('correo').value;
+        const contraseña = document.getElementById('password').value;
+        //const saldo = generarSaldoAleatorio();
+
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ CorreoPayPal: correo, ContrasenaPayPal: contraseña }) 
+        };
+        
+        try {
+            const response = await fetch("http://localhost:5194/api/PayPal", requestOptions);
+            const data = await response.json();
+            console.log(data)
+            if (response.ok) {
+              if (data.saldoSuficiente) { // Asegúrate de que el nombre de la propiedad es correcto
+                  console.log('Redireccionando a confirmación...');
+                  navigate('/confirmacion');
+                  alert("Aceptado. Su saldo es suficiente.");
+              } else {
+                  alert(data.Mensaje || "Saldo insuficiente"); 
+              }
+          } else {
+              if (response.status === 404) {
+                  alert('Usuario o contraseña incorrectos.');
+              } else {
+                  alert('Error desconocido. Por favor intente de nuevo.');
+              }
+          }
+      } catch (error) {
+          console.error('Error en la solicitud:', error);
+          alert('Error al procesar la solicitud.');
+      }
+  } else if (walletSelected) {
+      guardar();
+  }
+};
+
 
   const URL = "http://localhost:5194/api/TarjetaCredito";
 
@@ -75,15 +119,16 @@ const generarSaldoAleatorio = () => {
     const mes = document.getElementById('valido-hasta-dia').value;
     const anio = document.getElementById('valido-hasta-ano').value;
     const cvv = document.getElementById('cvv').value;
-  
+    
+
     const IDTarjeta = generarIDTarjeta();
     const saldo = generarSaldoAleatorio();
 
 
     const walletData = {
       TarjetaID: IDTarjeta.toString(),
-      NumeroTarjetaCredito: numeroTarjeta,
       UserID: nombre,
+      NumeroTarjetaCredito: numeroTarjeta,
       Mes: mes,
       Anio: anio,
       CVV: cvv,
@@ -94,7 +139,7 @@ const generarSaldoAleatorio = () => {
       method: 'POST',
       mode: 'cors',
       cache: 'no-cache',
-      credentials: 'same-origin' ,
+      credentials: 'same-origin',
       headers: {
         'content-type': 'application/json'
       },
@@ -102,20 +147,19 @@ const generarSaldoAleatorio = () => {
     };
   
     try {
-      const resp = await fetch(URL, requestOptions);
-      if (!resp.ok) {
-        const errorData = await resp.json();
-        console.error("Error al guardar:", errorData);
-        // Aquí puedes manejar los errores específicos de validación.
-        // Por ejemplo, mostrar un mensaje al usuario indicando qué campos necesitan ser corregidos.
-        return;
+      const response = await fetch(URL, requestOptions);
+      const data = await response.json();
+      if (response.ok) {
+          navigate('/confirmacion');
+          alert("Transacción exitosa");
+      } else {
+          alert(data.Message || "Error al procesar la solicitud.");
       }
-      const compraItem = await resp.json();
-      setCompras([...compras, compraItem]);
-    } catch (error) {
+  } catch (error) {
       console.error("Error en la solicitud:", error);
-    }
-  };
+      alert('Error al procesar la solicitud.');
+  }
+};
   
 
   return (
@@ -136,6 +180,9 @@ const generarSaldoAleatorio = () => {
             <div className="input-container">
               <label htmlFor="correo">Digite el correo electrónico de PayPal</label>
               <input type="text" id="correo" placeholder="Correo PayPal" />
+              <label htmlFor="password">Digite la contraseña</label>
+              <input type="password" id="password" placeholder="Contraseña" />
+              <button id="mostrar-contra" onClick={() => toggleMostrarContraseña()}>Ver</button>
             </div>
           </div>
         )}
@@ -175,5 +222,8 @@ const generarSaldoAleatorio = () => {
     </main>
   );
 };
+
+
+
 
 export default CompraMain;

@@ -1,25 +1,24 @@
-import Compra from "./componentes/Compra";
-import inicio from "./componentes/inicio";
-import {
-  Route,
-  createBrowserRouter,
-  createRoutesFromElements,
-  RouterProvider,
-} from "react-router-dom";
 
-const router = createBrowserRouter(
-  createRoutesFromElements(
-    <Route path="/" element={<Compra />}>
-      <Route path="inicio" element={<inicio />}></Route>
-    </Route>
-  )
-);
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Inicio from './componentes/Inicio';
+import Compra from './componentes/Compra'
+import Confirmacion from './componentes/Confirmacion';
+
 
 function App() {
+  
+
   return (
-    <>
-      <RouterProvider router={router} />
-    </>
+<Router>
+      <Routes>
+      <Route path="/" element={<Inicio />} />
+        <Route path="/compra" element={<Compra />} />
+        {/* <Route path="/reservas" element={<Reservas />} /> */}
+       {/* <Route path="/boletos" element={<Boletos />} /> */}
+        {/* <Route path="/vuelos" element={<Vuelos />} /> */}
+        <Route path="/confirmacion" element={<Confirmacion />} />
+      </Routes>
+    </Router>
   );
 }
 
