@@ -1,5 +1,6 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+
 import CompraMain from "./CompraMain";
 import CompraFooter from "./CompraFooter";
 import './stylecompra.css';
@@ -11,10 +12,9 @@ const Compra = () => {
             <header>
                 <div className="container">
                     <div className="logo">
-                        {/* Usamos el componente Link para enrutar */}
-                        <a href='inicio.jsx'>
-                            <img src="src/images/puenteGlobal.png" alt="Logo Puente Global"/>
-                        </a>
+                        
+                    <Link to="/"><img src="src/images/puenteGlobal.png" alt="Logo Puente Global"/></Link>
+                            
                     </div>
                     <div className="navegacion">
                         <ul>
