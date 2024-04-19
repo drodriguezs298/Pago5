@@ -1,25 +1,29 @@
-import "./inicio.css";
+
 import React from "react";
-import { Outlet, Link } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
+import "./inicio.css";
 
 const inicio = () => {
+  const navigate = useNavigate();
   return (
     <div>
       <nav>
         <ul>
           <li className="navbar-title">
             <img
-              src="pago\src\images\puenteGlobal.png"
+              src="../src/images/PuenteGlobal.png"
               alt="logo principal"
               style={{ width: "50%" }}
             />
           </li>
-          <li className="inicio">
-            {/* <a href="#">Inicio</a> */}
-            <Link to="/inicio">Inicio</Link>
-          </li>
-          <li className="repre">
-          <Link to="/">Compra</Link>
+          <li className="inicio"><a href="#">Inicio</a></li>
+          <li
+            className="repre"
+            onClick={() => {
+              navigate("/Compra");
+            }}
+          >
+            <a href="#">Compra</a>
           </li>
           <li className="contactenos">
             <a href="#">Boletos</a>
@@ -50,7 +54,7 @@ const inicio = () => {
           <div className="col">
             <div className="card h-100">
               <img
-                src="pago\src\images\joss-woodhead-3wFRlwS91yk-unsplash.jpg"
+                src="../src/images/joss-woodhead-3wFRlwS91yk-unsplash.jpg"
                 className="card-img-top"
                 alt=""
               />
@@ -69,7 +73,7 @@ const inicio = () => {
           <div className="col">
             <div className="card h-100">
               <img
-                src="pago\src\images\damir-babacic-72OkqJTLLA0-unsplash.jpg"
+                src="../src/images/damir-babacic-72OkqJTLLA0-unsplash.jpg"
                 className="card-img-top"
                 alt=""
               />
@@ -89,7 +93,7 @@ const inicio = () => {
           <div className="col">
             <div className="card h-100">
               <img
-                src="pago\src\images\alain-bonnardeaux-tLxGw_ITs7k-unsplash.jpg"
+                src="../src/images/alain-bonnardeaux-tLxGw_ITs7k-unsplash.jpg"
                 className="card-img-top"
                 alt=""
               />

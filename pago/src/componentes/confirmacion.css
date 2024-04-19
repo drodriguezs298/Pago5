@@ -12,7 +12,7 @@ body {
   }
 
   header {
-    background-color: #010a83;
+    background-color: #002c6a;
     border-bottom: 1px solid #ccc;
     padding: 40px 0;
      
@@ -88,7 +88,7 @@ body {
 .loader::before{
     animation: loader 2s linear infinite;
     content: '';
-    border: 10px solid #010a83;
+    border: 10px solid #002c6a;
     width: 300px;
     height: 300px;
     position: absolute;
@@ -142,7 +142,7 @@ body {
 
  /* Estilos para el pie de página */
  footer {
-  background-color: #010a83;
+  background-color: #002c6a;
   border-bottom: 1px solid #ccc;
   padding: 40px 0;
   margin-top: auto;

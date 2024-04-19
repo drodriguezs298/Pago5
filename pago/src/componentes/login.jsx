@@ -1,4 +1,6 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+
 
 const login = () => {
   return (
@@ -7,7 +9,7 @@ const login = () => {
         <div className="row d-flex justify-content-center align-items-center h-100">
           <img
             className="pt-5"
-            src="../pictures/Screenshot_2024-02-15_155144-removebg-preview 1.png"
+            src="pago\src\images\Group6.png"
             alt=""
           />
         </div>
