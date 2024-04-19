@@ -1,4 +1,3 @@
-
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "./inicio.css";
@@ -16,7 +15,11 @@ const inicio = () => {
               style={{ width: "50%" }}
             />
           </li>
-          <li className="inicio"><a href="#">Inicio</a></li>
+          <li onClick={() => {
+              navigate("/");
+            }}>
+            <a href="#">Inicio</a>
+          </li>
           <li
             className="repre"
             onClick={() => {
@@ -25,13 +28,23 @@ const inicio = () => {
           >
             <a href="#">Compra</a>
           </li>
-          <li className="contactenos">
+          <li
+            onClick={() => {
+              navigate("/InicioAdmin");
+            }}
+          >
             <a href="#">Boletos</a>
           </li>
-          <li className="servicio">
+          <li onClick={() => {
+              navigate("/Vuelos");
+            }}>
             <a href="#">Vuelos</a>
           </li>
-          <li className="quienesSomos">
+          <li
+            onClick={() => {
+              navigate("/Login");
+            }}
+          >
             <a href="#">Hola, Usuario</a>
           </li>
         </ul>
