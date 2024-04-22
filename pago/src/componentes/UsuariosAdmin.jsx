@@ -21,7 +21,7 @@ const Usuarios = () => {
             }}>
             <a href="#">Usuarios</a>
           </li>
-          <li>
+          <li onClick={() => navigate("/Roles")}>
             <a href="#">Roles</a>
           </li>
           <li onClick={() => {
@@ -29,7 +29,7 @@ const Usuarios = () => {
             }}>
             <a href="#">Consecutivos</a>
           </li>
-          <li>
+          <li onClick={() => navigate("/Pais")}>
             <a href="#">Paises</a>
           </li>
           <li onClick={() => {
@@ -37,7 +37,7 @@ const Usuarios = () => {
             }}>
             <a href="#">Aerolíneas</a>
           </li>
-          <li>
+          <li onClick={() => navigate("/Puertas")}>
             <a href="#">Puertas</a>
           </li>
           <li>

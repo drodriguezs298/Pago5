@@ -29,7 +29,7 @@ const Compra = () => {
                   navigate("/");
                 }}
               >
-                <a href="#">Compra</a>
+                <a href="#">Inicio</a>
               </li>
               <li>
                 <a href="#">Boletos</a>

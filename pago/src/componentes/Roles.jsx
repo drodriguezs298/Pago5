@@ -3,26 +3,25 @@ import { useNavigate } from "react-router-dom";
 import "./login.css";
 import "./tablas.css";
 
-const Aerolineas = () => {
+const Roles = () => {
   const navigate = useNavigate();
-  const [aerolineas, setAerolineas] = useState([]);
-  const [nuevaAerolinea, setNuevaAerolinea] = useState({
-    aerolineaID: "",
-    nombre: "",
-    paisID: ""
+  const [roles, setRoles] = useState([]);
+  const [nuevoRol, setNuevoRol] = useState({
+    rolID: "",
+    rolName: ""
   });
 
   useEffect(() => {
-    // Cargar las aerolíneas existentes desde la API al montar el componente
-    fetch("http://localhost:5194/api/Aerolinea")
+    // Cargar los roles existentes desde la API al montar el componente
+    fetch("http://localhost:5194/api/Rols")
       .then(response => response.json())
-      .then(data => setAerolineas(data))
+      .then(data => setRoles(data))
       .catch(error => console.error("Error al obtener los datos de la API:", error));
   }, []);
 
   const handleChange = e => {
     const { name, value } = e.target;
-    setNuevaAerolinea(prevState => ({
+    setNuevoRol(prevState => ({
       ...prevState,
       [name]: value
     }));
@@ -31,34 +30,33 @@ const Aerolineas = () => {
   const handleSubmit = async e => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:5194/api/Aerolinea", {
+      const response = await fetch("http://localhost:5194/api/Rols", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify(nuevaAerolinea)
+        body: JSON.stringify(nuevoRol)
       });
       if (response.ok) {
-        // Actualizar la lista de aerolíneas después de agregar la nueva aerolínea
+        // Actualizar la lista de roles después de agregar el nuevo rol
         const data = await response.json();
-        setAerolineas(prevState => [...prevState, data]);
+        setRoles(prevState => [...prevState, data]);
         // Limpiar el formulario después de enviar los datos
-        setNuevaAerolinea({
-          aerolineaID: "",
-          nombre: "",
-          paisID: ""
+        setNuevoRol({
+          rolID: "",
+          rolName: ""
         });
       } else {
-        console.error("Error al agregar nueva aerolínea:", response.statusText);
+        console.error("Error al agregar nuevo rol:", response.statusText);
       }
     } catch (error) {
-      console.error("Error al agregar nueva aerolínea:", error);
+      console.error("Error al agregar nuevo rol:", error);
     }
   };
 
   return (
     <>
-     <nav>
+      <nav>
         <ul>
           <li className="navbar-title" onClick={() => navigate("/InicioAdmin")}>
             <img
@@ -90,22 +88,20 @@ const Aerolineas = () => {
         </ul>
       </nav>
       <div className="container table-responsive">
-        <h2 className="titulo">Lista de Aerolíneas</h2>
+        <h2 className="titulo">Lista de Roles</h2>
         <table className="table table-hover table-bordered">
           <thead>
             <tr>
-              <th>Código</th>
-              <th>Aerolínea</th>
-              <th>País ID</th>
+              <th>ID</th>
+              <th>Nombre</th>
               <th />
             </tr>
           </thead>
           <tbody>
-            {aerolineas.map(aerolinea => (
-              <tr key={aerolinea.aerolineaID}>
-                <td>{aerolinea.aerolineaID}</td>
-                <td>{aerolinea.nombre}</td>
-                <td>{aerolinea.paisID}</td>
+            {roles.map(rol => (
+              <tr key={rol.rolID}>
+                <td>{rol.rolID}</td>
+                <td>{rol.rolName}</td>
                 <td>
                   <button className="btnEdit">Editar</button>
                 </td>
@@ -116,30 +112,23 @@ const Aerolineas = () => {
         <form onSubmit={handleSubmit}>
           <input
             type="text"
-            name="aerolineaID"
-            placeholder="Código"
-            value={nuevaAerolinea.aerolineaID}
+            name="rolID"
+            placeholder="ID del rol"
+            value={nuevoRol.rolID}
             onChange={handleChange}
           />
           <input
             type="text"
-            name="nombre"
-            placeholder="Nombre de la Aerolínea"
-            value={nuevaAerolinea.nombre}
+            name="rolName"
+            placeholder="Nombre del rol"
+            value={nuevoRol.rolName}
             onChange={handleChange}
           />
-          <input
-            type="text"
-            name="paisID"
-            placeholder="País ID"
-            value={nuevaAerolinea.paisID}
-            onChange={handleChange}
-          />
-          <button type="submit" className="btnAdmn">Agregar Aerolínea</button>
+          <button type="submit" className="btnAdmn">Agregar Rol</button>
         </form>
       </div>
     </>
   );
 };
 
-export default Aerolineas;
+export default Roles;

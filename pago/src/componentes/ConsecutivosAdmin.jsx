@@ -25,7 +25,7 @@ const Consecutivos = () => {
           >
             <a href="#">Usuarios</a>
           </li>
-          <li>
+          <li onClick={() => navigate("/Roles")}>
             <a href="#">Roles</a>
           </li>
           <li
@@ -35,7 +35,7 @@ const Consecutivos = () => {
           >
             <a href="#">Consecutivos</a>
           </li>
-          <li>
+          <li onClick={() => navigate("/Pais")}>
             <a href="#">Paises</a>
           </li>
           <li

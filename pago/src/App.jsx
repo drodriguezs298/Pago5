@@ -1,14 +1,17 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Inicio from "./componentes/Inicio";
+import Inicio from "./componentes/inicio";
 import Compra from "./componentes/Compra";
 import Confirmacion from "./componentes/Confirmacion";
-import Login from "./componentes/Login";
+import Login from "./componentes/login";
 import InicioAdmin from "./componentes/InicioAdmin";
 import AerolineasAdmin from "./componentes/AerolineasAdmin";
 import ConsecutivosAdmin from "./componentes/ConsecutivosAdmin";
 import Reserva from "./componentes/Reservas";
 import UsuariosAdmin from "./componentes/UsuariosAdmin";
 import Vuelos from "./componentes/Vuelos";
+import Pais from "./componentes/Pais";
+import Roles from "./componentes/Roles";
+import Puertas from "./componentes/Puertas";
 
 function App() {
   return (
@@ -25,6 +28,9 @@ function App() {
           <Route path="/UsuariosAdmin" element={<UsuariosAdmin />} />
           <Route path="/Vuelos" element={<Vuelos />} />
           <Route path="/InicioAdmin" element={<InicioAdmin />} />
+          <Route path="/Pais" element={<Pais />} />
+          <Route path="/Roles" element={<Roles />} />
+          <Route path="/Puertas" element={<Puertas />} />
         </Routes>
       </Router>
     </div>
