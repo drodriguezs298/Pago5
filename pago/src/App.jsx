@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import Inicio from "./componentes/inicio";
+import Inicio from "./componentes/Inicio";
 import Compra from "./componentes/Compra";
 import Confirmacion from "./componentes/Confirmacion";
 import Login from "./componentes/login"; // Importa el componente de Login
