@@ -58,7 +58,7 @@ const Aerolineas = () => {
 
   return (
     <>
-     <nav>
+    <nav>
         <ul>
           <li className="navbar-title" onClick={() => navigate("/InicioAdmin")}>
             <img
