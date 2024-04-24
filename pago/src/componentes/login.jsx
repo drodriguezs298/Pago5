@@ -9,29 +9,56 @@ const Login = () => {
   const [error, setError] = useState("");
 
   const handleLogin = async () => {
-    setError(""); // Limpiar cualquier error previo al intentar iniciar sesión
+    setError("");
+    if (!username || !password) {
+      setError("El nombre de usuario y la contraseña son obligatorios.");
+      return;
+    }
+
+    //La S = Simulacion - ESTOS DATOS NO MODIFICAN LOS VALORES EN LA BASE DE DATOS, TRANQUILIDAD :D
+    const SUserID = "0";
+    const SRolID = "0";
+
     try {
-      const response = await fetch("http://localhost:5194/api/Usuario", {
+      const response = await fetch("http://localhost:5194/api/Usuario/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({
+          UserID: SUserID,
+          Username: username,
+          Password: password,
+          RolID: SRolID,
+        }),
       });
 
       if (response.ok) {
-        // Si la respuesta es exitosa, redirige al usuario a la página de inicio
-        navigate("/inicio");
+        const data = await response.json();  
+        console.log("Login Successful: ", data); 
+        sessionStorage.setItem('UserID', data.userID); 
+        sessionStorage.setItem('RolID', data.rolID);
+  
+        console.log("Stored UserID: ", sessionStorage.getItem('UserID'));
+        console.log("Stored RolID: ", sessionStorage.getItem('RolID'));
+
+        
+        if (sessionStorage.getItem('RolID') === "R-1") {
+          navigate("/InicioAdmin");
+        } else {
+          navigate("/inicio");
+        }
       } else {
-        // Si la respuesta es un error, muestra un mensaje de error
-        navigate("/InicioAdmin");
         setError("Credenciales incorrectas. Por favor, inténtalo de nuevo.");
       }
     } catch (error) {
       console.error("Error al iniciar sesión:", error);
-      setError("Error al iniciar sesión. Por favor, inténtalo de nuevo más tarde.");
+      setError(
+        "Error al iniciar sesión. Por favor, inténtalo de nuevo más tarde."
+      );
     }
   };
+
 
   return (
     <>
