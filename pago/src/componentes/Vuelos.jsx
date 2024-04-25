@@ -1,30 +1,60 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
+import  { useState, useEffect } from 'react';
 import "./login.css";
 
 const Vuelos = () => {
   const navigate = useNavigate();
+  const [vuelos, setVuelos] = useState([]);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    fetchVuelos();
+  }, []);
+
+  const fetchVuelos = async () => {
+    try {
+      const response = await fetch('http://localhost:5194/api/Vuelo');
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
+      setVuelos(data);
+    } catch (error) {
+      setError("No se pudo cargar la lista de vuelos.");
+      console.error("Fetch error: ", error);
+    }
+  };
   return (
     <>
       <nav>
         <ul>
-          <li className="navbar-title">
+          <li className="navbar-title" onClick={() => {
+              navigate("/Inicio");
+            }}>
             <img
-              src="../pictures/puenteGlobal.png"
+              src="../src/images/PuenteGlobal.png"
               alt="logo principal"
               style={{ width: "50%" }}
             />
           </li>
-          <li>
+          <li onClick={() => {
+              navigate("/Inicio");
+            }}>
             <a href="">Inicio</a>
           </li>
-          <li>
+          <li onClick={() => {
+              navigate("/Reservas");
+            }}>
             <a href="#">Reservas</a>
           </li>
-          <li>
+          <li onClick={() => {
+              navigate("/Boletos");
+            }}>
             <a href="#">Boletos</a>
           </li>
-          <li>
+          <li onClick={() => {
+              navigate("/Vuelos");
+            }}>
             <a href="#">Vuelos</a>
           </li>
           <li>
@@ -49,118 +79,24 @@ const Vuelos = () => {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>1</td>
-              <td>Avianca</td>
-              <td>
-                <i
-                  className="bx bxs-plane-take-off"
-                  style={{ color: "#f5c76b" }}
-                />{" "}
-                SJO
-              </td>
-              <td>
-                <i className="bx bxs-plane-land" style={{ color: "#f5c76b" }} />{" "}
-                IAH
-              </td>
-              <td>12-4-2024</td>
-              <td>20-4-2024</td>
-              <td>A1</td>
-              <td>$350</td>
-              <td>
-                <button className="btnAdmn">Reservar</button>
-              </td>
-            </tr>
-            <tr>
-              <td>1</td>
-              <td>Avianca</td>
-              <td>
-                <i
-                  className="bx bxs-plane-take-off"
-                  style={{ color: "#f5c76b" }}
-                />{" "}
-                SJO
-              </td>
-              <td>
-                <i className="bx bxs-plane-land" style={{ color: "#f5c76b" }} />{" "}
-                IAH
-              </td>
-              <td>12-4-2024</td>
-              <td>20-4-2024</td>
-              <td>A1</td>
-              <td>$350</td>
-              <td>
-                <button className="btnAdmn">Reservar</button>
-              </td>
-            </tr>
-            <tr>
-              <td>1</td>
-              <td>Avianca</td>
-              <td>
-                <i
-                  className="bx bxs-plane-take-off"
-                  style={{ color: "#f5c76b" }}
-                />{" "}
-                SJO
-              </td>
-              <td>
-                <i className="bx bxs-plane-land" style={{ color: "#f5c76b" }} />{" "}
-                IAH
-              </td>
-              <td>12-4-2024</td>
-              <td>20-4-2024</td>
-              <td>A1</td>
-              <td>$350</td>
-              <td>
-                <button className="btnAdmn">Reservar</button>
-              </td>
-            </tr>
-            <tr>
-              <td>1</td>
-              <td>Avianca</td>
-              <td>
-                <i
-                  className="bx bxs-plane-take-off"
-                  style={{ color: "#f5c76b" }}
-                />{" "}
-                SJO
-              </td>
-              <td>
-                <i className="bx bxs-plane-land" style={{ color: "#f5c76b" }} />{" "}
-                IAH
-              </td>
-              <td>12-4-2024</td>
-              <td>20-4-2024</td>
-              <td>A1</td>
-              <td>$350</td>
-              <td>
-                <button className="btnAdmn">Reservar</button>
-              </td>
-            </tr>
-            <tr>
-              <td>1</td>
-              <td>Avianca</td>
-              <td>
-                <i
-                  className="bx bxs-plane-take-off"
-                  style={{ color: "#f5c76b" }}
-                />{" "}
-                SJO
-              </td>
-              <td>
-                <i className="bx bxs-plane-land" style={{ color: "#f5c76b" }} />{" "}
-                IAH
-              </td>
-              <td>12-4-2024</td>
-              <td>20-4-2024</td>
-              <td>A1</td>
-              <td>$350</td>
-              <td>
-                <button className="btnAdmn">Reservar</button>
-              </td>
-            </tr>
+            {vuelos.map((vuelo) => (
+              <tr key={vuelo.vueloID}>
+                <td>{vuelo.vueloID}</td>
+                <td>{vuelo.aerolineaID}</td>
+                <td>{vuelo.origen}</td>
+                <td>{vuelo.destino}</td>
+                <td>{vuelo.fechaSalida}</td>
+                <td>{vuelo.fechaLlegada}</td>
+                <td>{vuelo.puertaAeropuertoID}</td>
+                <td>${vuelo.monto}</td>
+                <td>
+                  <button className="btnAdmn">Reservar</button>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
+        {error && <p className="error">{error}</p>}
       </div>
     </>
   );
