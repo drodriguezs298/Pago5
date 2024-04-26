@@ -132,7 +132,7 @@ const Puertas = () => {
           <li onClick={() => navigate("/UsuariosAdmin")}>
             <a href="#">Usuarios</a>
           </li>
-          <li>
+          <li onClick={() => navigate("/Roles")}>
             <a href="#">Roles</a>
           </li>
           <li onClick={() => navigate("/ConsecutivosAdmin")}>

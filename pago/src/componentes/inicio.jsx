@@ -1,8 +1,8 @@
-import React from "react";
+
 import { useNavigate } from "react-router-dom";
 import "./inicio.css";
 
-const inicio = () => {
+const Inicio = () => {
   const navigate = useNavigate();
   return (
     <div>
@@ -16,7 +16,7 @@ const inicio = () => {
             />
           </li>
           <li onClick={() => {
-              navigate("/");
+              navigate("/Inicio");
             }}>
             <a href="#">Inicio</a>
           </li>
@@ -128,4 +128,4 @@ const inicio = () => {
   );
 };
 
-export default inicio;
+export default Inicio;

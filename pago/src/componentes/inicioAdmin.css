@@ -16,14 +16,17 @@
   .btn-nac {
     background-color: #8B5D33 !important;
   }
-  .btn-serv {
-    background-color: #256D1B !important;
+  .btn-puert {
+    background-color: #5F7470 !important;
   }
   .btn-cont {
     background-color: #8B2635 !important;
   }
   .btn-puert {
     background-color: #5F7470 !important;
+  }
+  .btn-vuel {
+    background-color: #944f9b !important;
   }
   .btn-group {
     position: static !important;

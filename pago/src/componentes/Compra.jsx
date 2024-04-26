@@ -1,4 +1,3 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
 import CompraMain from "./CompraMain";
 import CompraFooter from "./CompraFooter";
@@ -13,7 +12,7 @@ const Compra = () => {
           <div className="logo">
             <li
               onClick={() => {
-                navigate("/");
+                navigate("/Inicio");
               }}
             >
               <img
@@ -26,15 +25,20 @@ const Compra = () => {
             <ul>
               <li
                 onClick={() => {
-                  navigate("/");
+                  navigate("/Inicio");
                 }}
               >
                 <a href="#">Inicio</a>
               </li>
-              <li>
+              <li   onClick={() => {
+                  navigate("/Boletos");
+                }}>
                 <a href="#">Boletos</a>
               </li>
-              <li>
+              <li
+                 onClick={() => {
+                  navigate("/Vuelos");
+                }}>
                 <a href="#">Vuelos</a>
               </li>
             </ul>

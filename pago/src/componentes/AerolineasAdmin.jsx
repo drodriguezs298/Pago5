@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./login.css";
 import "./tablas.css";
@@ -11,14 +11,19 @@ const Aerolineas = () => {
     nombre: "",
     paisID: ""
   });
+  const [editMode, setEditMode] = useState(false);
 
   useEffect(() => {
-    // Cargar las aerolíneas existentes desde la API al montar el componente
     fetch("http://localhost:5194/api/Aerolinea")
       .then(response => response.json())
       .then(data => setAerolineas(data))
       .catch(error => console.error("Error al obtener los datos de la API:", error));
   }, []);
+
+  const handleEdit = (aerolinea) => {
+    setNuevaAerolinea(aerolinea);
+    setEditMode(true);
+  };
 
   const handleChange = e => {
     const { name, value } = e.target;
@@ -28,26 +33,23 @@ const Aerolineas = () => {
     }));
   };
 
-  const handleSubmit = async e => {
+  
+
+
+  const handleAdd = async (e) => {
     e.preventDefault();
     try {
       const response = await fetch("http://localhost:5194/api/Aerolinea", {
-        method: "POST",
+        method: 'POST',
         headers: {
           "Content-Type": "application/json"
         },
         body: JSON.stringify(nuevaAerolinea)
       });
       if (response.ok) {
-        // Actualizar la lista de aerolíneas después de agregar la nueva aerolínea
-        const data = await response.json();
-        setAerolineas(prevState => [...prevState, data]);
-        // Limpiar el formulario después de enviar los datos
-        setNuevaAerolinea({
-          aerolineaID: "",
-          nombre: "",
-          paisID: ""
-        });
+        const addedAerolinea = await response.json();
+        setAerolineas([...aerolineas, addedAerolinea]);
+        setNuevaAerolinea({ aerolineaID: "", nombre: "", paisID: "" }); // Limpiar formulario
       } else {
         console.error("Error al agregar nueva aerolínea:", response.statusText);
       }
@@ -56,6 +58,33 @@ const Aerolineas = () => {
     }
   };
 
+  
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    const url = `http://localhost:5194/api/Aerolinea?id=${encodeURIComponent(nuevaAerolinea.aerolineaID)}`;
+    try {
+      const response = await fetch(url, {
+        method: 'PUT',
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(nuevaAerolinea)
+      });
+      if (response.ok) {
+        const updatedList = aerolineas.map(aerolinea =>
+          aerolinea.aerolineaID === nuevaAerolinea.aerolineaID ? nuevaAerolinea : aerolinea
+        );
+        setAerolineas(updatedList);
+        setNuevaAerolinea({ aerolineaID: "", nombre: "", paisID: "" });
+        setEditMode(false);
+      } else {
+        console.error("Error en la petición:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error en la operación:", error);
+    }
+  };
+  
   return (
     <>
     <nav>
@@ -107,36 +136,37 @@ const Aerolineas = () => {
                 <td>{aerolinea.nombre}</td>
                 <td>{aerolinea.paisID}</td>
                 <td>
-                  <button className="btnEdit">Editar</button>
+                  <button onClick={() => handleEdit(aerolinea)} className="btnEdit">Editar</button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            name="aerolineaID"
-            placeholder="Código"
-            value={nuevaAerolinea.aerolineaID}
-            onChange={handleChange}
-          />
-          <input
-            type="text"
-            name="nombre"
-            placeholder="Nombre de la Aerolínea"
-            value={nuevaAerolinea.nombre}
-            onChange={handleChange}
-          />
-          <input
-            type="text"
-            name="paisID"
-            placeholder="País ID"
-            value={nuevaAerolinea.paisID}
-            onChange={handleChange}
-          />
-          <button type="submit" className="btnAdmn">Agregar Aerolínea</button>
-        </form>
+        <form onSubmit={editMode ? handleUpdate : handleAdd}>
+  <input
+    type="text"
+    name="aerolineaID"
+    placeholder="Código"
+    value={nuevaAerolinea.aerolineaID}
+    onChange={handleChange}
+    readOnly={editMode}
+  />
+  <input
+    type="text"
+    name="nombre"
+    placeholder="Nombre de la Aerolínea"
+    value={nuevaAerolinea.nombre}
+    onChange={handleChange}
+  />
+  <input
+    type="text"
+    name="paisID"
+    placeholder="País ID"
+    value={nuevaAerolinea.paisID}
+    onChange={handleChange}
+  />
+  <button type="submit" className="btnAdmn">{editMode ? 'Actualizar' : 'Agregar'} Aerolínea</button>
+</form>
       </div>
     </>
   );

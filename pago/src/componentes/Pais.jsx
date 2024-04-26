@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./login.css";
 import "./tablas.css";
@@ -10,9 +10,9 @@ const Paises = () => {
     paisID: "",
     nombre: ""
   });
+  const [editMode, setEditMode] = useState(false);
 
   useEffect(() => {
-    // Cargar los países existentes desde la API al montar el componente
     fetch("http://localhost:5194/api/Paises")
       .then(response => response.json())
       .then(data => setPaises(data))
@@ -27,31 +27,59 @@ const Paises = () => {
     }));
   };
 
-  const handleSubmit = async e => {
+  
+
+  const handleAddPais = async (e) => {
     e.preventDefault();
     try {
       const response = await fetch("http://localhost:5194/api/Paises", {
-        method: "POST",
+        method: 'POST',
         headers: {
           "Content-Type": "application/json"
         },
         body: JSON.stringify(nuevoPais)
       });
       if (response.ok) {
-        // Actualizar la lista de países después de agregar el nuevo país
-        const data = await response.json();
-        setPaises(prevState => [...prevState, data]);
-        // Limpiar el formulario después de enviar los datos
-        setNuevoPais({
-          paisID: "",
-          nombre: ""
-        });
+        const addedPais = await response.json();
+        setPaises([...paises, addedPais]);
+        setNuevoPais({ paisID: "", nombre: "" }); // Limpiar formulario
+        alert('País agregado exitosamente!');
       } else {
-        console.error("Error al agregar nuevo país:", response.statusText);
+        throw new Error('Error al agregar el país');
       }
     } catch (error) {
-      console.error("Error al agregar nuevo país:", error);
+      console.error("Error al agregar el país:", error);
     }
+  };
+  const handleUpdatePais = async (e) => {
+    e.preventDefault();
+    const url = `http://localhost:5194/api/Paises/${encodeURIComponent(nuevoPais.paisID)}`;
+    try {
+      const response = await fetch(url, {
+        method: 'PUT',
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(nuevoPais)
+      });
+      if (response.ok) {
+        const updatedPais = paises.map(pais => pais.paisID === editMode ? updatedPais : pais);
+        setPaises(updatedPais);
+        setNuevoPais({ paisID: "", nombre: "" });
+        setEditMode(false);
+        alert('País actualizado exitosamente!');
+      } else {
+        throw new Error('Error al actualizar el país');
+      }
+    } catch (error) {
+      console.error("Error al actualizar el país:", error);
+    }
+  };
+  
+
+  const handleEdit = (pais) => {
+    setNuevoPais(pais);
+    setEditMode(true);
   };
 
   return (
@@ -103,29 +131,34 @@ const Paises = () => {
                 <td>{pais.paisID}</td>
                 <td>{pais.nombre}</td>
                 <td>
-                  <button className="btnEdit">Editar</button>
+                  <button className="btnEdit" onClick={() => handleEdit(pais)}>
+                    Editar
+                  </button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            name="paisID"
-            placeholder="ID del país"
-            value={nuevoPais.paisID}
-            onChange={handleChange}
-          />
-          <input
-            type="text"
-            name="nombre"
-            placeholder="Nombre del país"
-            value={nuevoPais.nombre}
-            onChange={handleChange}
-          />
-          <button type="submit" className="btnAdmn">Agregar País</button>
-        </form>
+        <form onSubmit={editMode ? handleUpdatePais : handleAddPais}>
+  <input
+    type="text"
+    name="paisID"
+    placeholder="ID del país"
+    value={nuevoPais.paisID}
+    onChange={handleChange}
+    readOnly={editMode}
+  />
+  <input
+    type="text"
+    name="nombre"
+    placeholder="Nombre del país"
+    value={nuevoPais.nombre}
+    onChange={handleChange}
+  />
+  <button type="submit" className="btnAdmn">
+    {editMode ? "Actualizar País" : "Agregar País"}
+  </button>
+</form>
       </div>
     </>
   );

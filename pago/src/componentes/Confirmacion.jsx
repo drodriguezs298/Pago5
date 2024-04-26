@@ -37,13 +37,13 @@ const Confirmacion = () => {
             <header>
                 <div className="container">
                     <div className="logo">
-                        <Link to="/"><img src="#" alt="Logo Puente Global" /></Link>
+                        <Link to="/Inicio"><img src="../src/images/PuenteGlobal.png" alt="Logo Puente Global" /></Link>
                     </div>
                     <div className="navegacion">
                         <ul>
-                            <li><Link to="/reservas">Reservas</Link></li>
-                            <li><Link to="/boletos">Boletos</Link></li>
-                            <li><Link to="/vuelos">Vuelos</Link></li>
+                            <li><Link to="/Reservas">Reservas</Link></li>
+                            <li><Link to="/Boletos">Boletos</Link></li>
+                            <li><Link to="/Vuelos">Vuelos</Link></li>
                         </ul>
                     </div>
                     <div className="usuario">

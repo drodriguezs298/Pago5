@@ -1,9 +1,9 @@
-import React from "react";
+
 import { useNavigate } from "react-router-dom";
 import "./inicio.css";
 import "./inicioAdmin.css";
 
-const inicioAdmin = () => {
+const InicioAdmin = () => {
   const navigate = useNavigate();
   return (
     <>
@@ -37,7 +37,9 @@ const inicioAdmin = () => {
             }}>Usuarios</button>
         </a>
         <a href="#!">
-          <button className="btnAdmn btn-nac">Roles</button>
+          <button className="btnAdmn btn-nac"onClick={() => {
+              navigate("/Roles");
+            }}>Roles</button>
         </a>
         <a href="#!">
           <button className="btnAdmn btn-extr" onClick={() => {
@@ -45,7 +47,9 @@ const inicioAdmin = () => {
             }}>Consecutivos</button>
         </a>
         <a href="#!">
-          <button className="btnAdmn btn-serv">Paises</button>
+          <button className="btnAdmn btn-serv"onClick={() => {
+              navigate("/Pais");
+            }}>Paises</button>
         </a>
         <a href="#!">
           <button className="btnAdmn btn-cont" onClick={() => {
@@ -53,7 +57,14 @@ const inicioAdmin = () => {
             }}>Aerolineas</button>
         </a>
         <a href="#!">
-          <button className="btnAdmn btn-puert">Puertas</button>
+          <button className="btnAdmn btn-puert"onClick={() => {
+              navigate("/Puertas");
+            }}>Puertas</button>
+        </a>
+        <a href="#!">
+          <button className="btnAdmn btn-vuel"onClick={() => {
+              navigate("/VuelosAdmin");
+            }}>Vuelos</button>
         </a>
         <a>
           <button className="btnAdmn btn-danger" onClick={() => {
@@ -65,4 +76,4 @@ const inicioAdmin = () => {
   );
 };
 
-export default inicioAdmin;
+export default InicioAdmin;

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./login.css";
 
@@ -59,7 +59,6 @@ const Login = () => {
     }
   };
 
-
   return (
     <>
       <div className="row d-flex justify-content-center align-items-center h-100">
@@ -73,11 +72,17 @@ const Login = () => {
         <div className="container pt-4 h-100">
           <div className="row d-flex justify-content-center align-items-center h-100">
             <div className="col-12 col-md-8 col-lg-6 col-xl-5">
-              <div className="card text-white" style={{ borderRadius: "1rem", backgroundColor: "#002c6a" }}>
+              <div
+                className="card text-white"
+                style={{ borderRadius: "1rem", backgroundColor: "#002c6a" }}
+              >
                 <div className="card-body p-5 text-center">
                   <div className="mb-md-4 mt-md-2 pb-2">
                     <h2 className="fw-bold mb-2">Log-In</h2>
-                    <div data-mdb-input-init="" className="form-outline form-white mb-4">
+                    <div
+                      data-mdb-input-init=""
+                      className="form-outline form-white mb-4"
+                    >
                       <input
                         type="text"
                         id="typeUsernameX"
@@ -87,7 +92,10 @@ const Login = () => {
                         placeholder="Usuario"
                       />
                     </div>
-                    <div data-mdb-input-init="" className="form-outline form-white mb-4">
+                    <div
+                      data-mdb-input-init=""
+                      className="form-outline form-white mb-4"
+                    >
                       <input
                         type="password"
                         id="typePasswordX"
@@ -133,4 +141,3 @@ const Login = () => {
 };
 
 export default Login;
-

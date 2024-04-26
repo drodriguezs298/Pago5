@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./login.css";
 import "./tablas.css";
@@ -6,53 +6,76 @@ import "./tablas.css";
 const Roles = () => {
   const navigate = useNavigate();
   const [roles, setRoles] = useState([]);
-  const [nuevoRol, setNuevoRol] = useState({
-    rolID: "",
-    rolName: ""
-  });
+  const [nuevoRol, setNuevoRol] = useState({ rolID: "", rolName: "" });
+  const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
-    // Cargar los roles existentes desde la API al montar el componente
     fetch("http://localhost:5194/api/Rols")
-      .then(response => response.json())
-      .then(data => setRoles(data))
-      .catch(error => console.error("Error al obtener los datos de la API:", error));
+      .then((response) => response.json())
+      .then((data) => setRoles(data))
+      .catch((error) => console.error("Error al obtener los datos de la API:", error));
   }, []);
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    setNuevoRol(prevState => ({
+    setNuevoRol((prevState) => ({
       ...prevState,
-      [name]: value
+      [name]: value,
     }));
   };
 
-  const handleSubmit = async e => {
+  const handleAddRole = async (e) => {
     e.preventDefault();
     try {
       const response = await fetch("http://localhost:5194/api/Rols", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(nuevoRol)
+        body: JSON.stringify(nuevoRol),
       });
       if (response.ok) {
-        // Actualizar la lista de roles después de agregar el nuevo rol
         const data = await response.json();
-        setRoles(prevState => [...prevState, data]);
-        // Limpiar el formulario después de enviar los datos
-        setNuevoRol({
-          rolID: "",
-          rolName: ""
-        });
+        setRoles([...roles, data]);
+        setNuevoRol({ rolID: "", rolName: "" });
+        alert('Rol agregado exitosamente!');
       } else {
-        console.error("Error al agregar nuevo rol:", response.statusText);
+        throw new Error('Error al agregar el rol');
       }
     } catch (error) {
-      console.error("Error al agregar nuevo rol:", error);
+      console.error("Error al agregar el rol:", error);
     }
   };
+
+  const handleUpdateRole = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch(`http://localhost:5194/api/Rols/${nuevoRol.rolID}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(nuevoRol),
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setRoles(roles.map(rol => rol.rolID === nuevoRol.rolID ? data : rol));
+        setNuevoRol({ rolID: "", rolName: "" });
+        setIsEditing(false);
+        alert('Rol actualizado exitosamente!');
+      } else {
+        throw new Error('Error al actualizar el rol');
+      }
+    } catch (error) {
+      console.error("Error al actualizar el rol:", error);
+    }
+  };
+
+  const handleEdit = (rol) => {
+    setNuevoRol(rol);
+    setIsEditing(true);
+  };
+
 
   return (
     <>
@@ -87,6 +110,7 @@ const Roles = () => {
           </li>
         </ul>
       </nav>
+      <nav>{/* Navigation code here */}</nav>
       <div className="container table-responsive">
         <h2 className="titulo">Lista de Roles</h2>
         <table className="table table-hover table-bordered">
@@ -98,33 +122,27 @@ const Roles = () => {
             </tr>
           </thead>
           <tbody>
-            {roles.map(rol => (
+            {roles.map((rol) => (
               <tr key={rol.rolID}>
                 <td>{rol.rolID}</td>
                 <td>{rol.rolName}</td>
                 <td>
-                  <button className="btnEdit">Editar</button>
+                  <button className="btnEdit" onClick={() => handleEdit(rol)}>
+                    Editar
+                  </button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            name="rolID"
-            placeholder="ID del rol"
-            value={nuevoRol.rolID}
-            onChange={handleChange}
-          />
-          <input
-            type="text"
-            name="rolName"
-            placeholder="Nombre del rol"
-            value={nuevoRol.rolName}
-            onChange={handleChange}
-          />
-          <button type="submit" className="btnAdmn">Agregar Rol</button>
+        <form onSubmit={isEditing ? handleUpdateRole : handleAddRole}>
+          <input type="text" name="rolID" placeholder="ID del rol" value={nuevoRol.rolID} onChange={handleChange} readOnly={isEditing} />
+          <input type="text" name="rolName" placeholder="Nombre del rol" value={nuevoRol.rolName} onChange={handleChange} />
+          {isEditing ? (
+            <button type="submit" className="btnAdmn">Guardar Cambios</button>
+          ) : (
+            <button type="submit" className="btnAdmn">Agregar Rol</button>
+          )}
         </form>
       </div>
     </>

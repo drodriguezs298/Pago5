@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./login.css";
 import "./tablas.css";
@@ -105,7 +105,7 @@ const Usuarios = () => {
     <>
     <nav>
         <ul>
-          <li className="navbar-title">
+          <li className="navbar-title" onClick={() => navigate("/InicioAdmin")}>
             <img
               src="../src/images/puenteGlobal.png"
               alt="logo principal"
