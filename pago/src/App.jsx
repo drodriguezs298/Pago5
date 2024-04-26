@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import Inicio from "./componentes/Inicio";
+import Inicio from "./componentes/inicio";
 import Compra from "./componentes/Compra";
 import Confirmacion from "./componentes/Confirmacion";
 import Login from "./componentes/login"; // Importa el componente de Login
@@ -9,6 +9,7 @@ import ConsecutivosAdmin from "./componentes/ConsecutivosAdmin";
 import Reserva from "./componentes/Reservas";
 import UsuariosAdmin from "./componentes/UsuariosAdmin";
 import Vuelos from "./componentes/Vuelos";
+import VuelosAdmin from "./componentes/VuelosAdmin";
 import Pais from "./componentes/Pais";
 import Roles from "./componentes/Roles";
 import Puertas from "./componentes/Puertas";
@@ -32,7 +33,9 @@ function App() {
           <Route path="/Reserva" element={<Reserva />} />
           <Route path="/UsuariosAdmin" element={<UsuariosAdmin />} />
           <Route path="/Vuelos" element={<Vuelos />} />
+          <Route path="/VuelosAdmin" element={<VuelosAdmin />} />
           <Route path="/InicioAdmin" element={<InicioAdmin />} />
+          <Route path="/Inicio" element={<Inicio />} />
           <Route path="/Pais" element={<Pais />} />
           <Route path="/Roles" element={<Roles />} />
           <Route path="/Puertas" element={<Puertas />} />
